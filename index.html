@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vishal Yadav | Data Science & Full-Stack AI Engineer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- EMBEDDED MASTER CSS MATRIX -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .font-mono { font-family: 'Space Mono', monospace; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #1f1f1f; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+            background: #06b6d4; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-link:hover::after { width: 100%; }
+        .project-card { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s; }
+        .project-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px -15px rgba(6, 182, 212, 0.15); }
+        .cyber-scanline { position: relative; overflow: hidden; }
+        .cyber-scanline::before {
+            content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+        .neon-glow-hover:hover { border-color: #06b6d4 !important; box-shadow: 0 0 25px rgba(6, 182, 212, 0.3); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-down { animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* --- EXPLICIT HARDCODED LIGHT MODE OVERRIDES --- */
+        .pure-light-bg { background-color: #f8fafc !important; color: #0f172a !important; }
+        .pure-light-card { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; }
+        .pure-light-header { background-color: rgba(248, 250, 252, 0.85) !important; border-color: rgba(15, 23, 42, 0.08) !important; }
+        .pure-light-text { color: #0f172a !important; }
+        .pure-light-muted { color: #475569 !important; }
+        .pure-light-box { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; color: #0f172a !important; }
+        
+        .typed-cursor { opacity: 1; animation: blink 0.7s infinite; color: #06b6d4; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body id="body-node" class="bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-cyan-500 selection:text-neutral-950 overflow-x-hidden transition-colors duration-300">
+
+    <canvas id="matrix-canvas" class="fixed inset-0 opacity-[0.03] pointer-events-none z-0"></canvas>
+
+    <header class="fixed top-0 w-full backdrop-blur-xl bg-neutral-950/70 z-50 border-b border-cyan-500/10 transition-all duration-300" id="main-header">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 hover:scale-105 transition-transform">&lt;VISHAL.Y /&gt;</a>
+            <div class="hidden md:flex items-center space-x-8 text-xs font-mono tracking-widest uppercase">
+                <a href="#about" class="nav-link text-neutral-400 hover:text-cyan-400">// 01. About</a>
+                <a href="#skills" class="nav-link text-neutral-400 hover:text-cyan-400">// 02. Stack</a>
+                <a href="#projects" class="nav-link text-neutral-400 hover:text-cyan-400">// 03. Engine</a>
+                <a href="#certificates" class="nav-link text-neutral-400 hover:text-cyan-400">// 04. Vault</a>
+                <a href="#contact" class="nav-link text-neutral-400 hover:text-cyan-400">// 05. Terminal</a>
+            </div>
+            <div class="hidden md:flex items-center">
+                <!-- Day/Night Toggle Button -->
+                <button id="theme-toggle" class="text-neutral-400 hover:text-cyan-400 font-mono text-xs transition-colors px-3 py-2 border border-neutral-800 rounded bg-neutral-900/40 backdrop-blur-sm mr-4 card-node">
+                    <span id="theme-toggle-light-icon" class="hidden"><i class="fa-solid fa-sun mr-1"></i> LIGHT_MODE</span>
+                    <span id="theme-toggle-dark-icon"><i class="fa-solid fa-moon mr-1"></i> DARK_MODE</span>
+                </button>
+                <!-- CV Placeholder Button -->
+                <a href="#" id="cv-btn-main" class="cyber-btn px-4 py-2 border border-cyan-400/50 text-cyan-400 text-xs font-mono rounded relative overflow-hidden block">
+                    <span class="relative z-10"><i class="fa-solid fa-terminal text-[10px] mr-1"></i> ACCESS_CV.SYS</span>
+                </a>
+            </div>
+            <button class="md:hidden text-2xl text-cyan-400 focus:outline-none" id="menu-btn">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-neutral-950/95 border-b border-cyan-500/10 px-6 py-6 space-y-4 font-mono text-xs uppercase tracking-wider animate-slide-down">
+            <a href="#about" class="block py-2 text-neutral-400 hover:text-cyan-400">// 01. About</a>
+            <a href="#skills" class="block py-2 text-neutral-400 hover:text-cyan-400">// 02. Stack</a>
+            <a href="#projects" class="block py-2 text-neutral-400 hover:text-cyan-400">// 03. Engine</a>
+            <a href="#certificates" class="block py-2 text-neutral-400 hover:text-cyan-400">// 04. Vault</a>
+            <a href="#contact" class="block py-2 text-neutral-400 hover:text-cyan-400">// 05. Terminal</a>
+            <div class="pt-2 flex flex-col gap-3">
+                <button id="mobile-theme-toggle" class="text-neutral-400 text-left font-mono text-xs py-2 border-t border-neutral-800">
+                    <i class="fa-solid fa-circle-half-stroke mr-1"></i> TOGGLE_THEME
+                </button>
+                <a href="#" id="cv-btn-mobile" class="block text-cyan-400 font-bold"><i class="fa-solid fa-file-code mr-1"></i> ACCESS_CV.SYS</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center pt-24 px-6 relative">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(6,182,212,0.07),transparent_50%)]"></div>
+        <div class="max-w-5xl text-center z-10 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/5 border border-cyan-500/20 rounded-full font-mono text-[10px] text-cyan-400 uppercase tracking-widest animate-pulse">
+                <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span> System Node: Active
+            </div>
+            <h1 class="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 font-display transition-all duration-300" id="hero-title">
+                Vishal Yadav
+            </h1>
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold font-mono tracking-tight text-cyan-400/90 min-h-[40px]">
+                &lt;<span id="type-engine"></span><span class="typed-cursor">|</span>&gt;
+            </h2>
+            <p class="text-sm md:text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light content-text">
+                B.Tech CSE student specializing in Data Science & Development. I write highly optimized asynchronous architectures, design deterministic database layers, and script production-grade visual analytic matrices.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 pt-4 font-mono text-xs tracking-wider">
+                <a href="#projects" class="px-6 py-3 bg-cyan-500 text-neutral-950 font-bold rounded hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all duration-300">
+                    [ INITIALIZE_PROJECTS ]
+                </a>
+                <a href="https://github.com/vishalyadav351" target="_blank" class="px-6 py-3 border border-neutral-800 text-neutral-400 rounded hover:border-cyan-500/30 hover:text-cyan-400 transition-all duration-300 bg-neutral-900/40 backdrop-blur-sm card-node label-text">
+                    git clone profile.repo
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-600 font-mono text-[10px] tracking-widest uppercase">
+            <span>Scroll Down</span>
+            <div class="w-[1px] h-12 bg-gradient-to-b from-cyan-500/50 to-transparent animate-bounce"></div>
+        </div>
+    </section>
+
+    <!-- Section 1: About Me -->
+    <section id="about" class="py-32 max-w-6xl mx-auto px-6 scroll-mt-20">
+        <h2 class="text-xl md:text-2xl font-bold mb-16 flex items-center gap-4 uppercase font-mono tracking-wider title-node"><span class="text-cyan-400">// 01.</span> Execution Core</h2>
+        <div class="grid md:grid-cols-12 gap-12 items-center">
+            
+            <div class="md:col-span-5 flex justify-center order-last md:order-first">
+                <div class="relative w-full max-w-[280px] aspect-square group mx-auto md:mx-0">
+                    <div class="absolute inset-0 border border-cyan-500/20 translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-500 rounded-lg"></div>
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg blur opacity-10 group-hover:opacity-40 transition duration-500"></div>
+                    
+                    <div class="cyber-scanline relative w-full h-full bg-neutral-900 border border-neutral-800/80 p-2 rounded-lg overflow-hidden flex justify-center items-center group-hover:border-cyan-500/30 transition-all duration-500 card-node">
+                        <img src="profile.jpg2.jpeg" alt="Vishal Yadav" class="w-full h-full object-contain max-h-[260px] rounded-md filter grayscale contrast-115 group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-cyan-500/0 mix-blend-screen group-hover:opacity-0 transition-opacity duration-500 pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-7 space-y-5 text-neutral-400 text-sm md:text-base font-light leading-relaxed content-text">
+                <p>
+                    I approach engineering from a holistic standpoint. Rather than locking myself into basic scripting, I specialize in engineering complete pipelines where frontend, backend data loops, and analytic metrics systems behave as a singular, robust organism.
+                </p>
+                <p>
+                    My problem-solving rhythm is calibrated daily through algorithmic challenges. I design clean layouts, map relational indices, and scale machine learning frameworks to turn unorganized telemetry into business logic.
+                </p>
+                <div class="bg-neutral-900/40 border border-neutral-900 p-4 rounded-lg font-mono text-xs space-y-2 max-w-xl card-node">
+                    <div class="text-neutral-500">&gt; cat specs.json</div>
+                    <div><span class="text-cyan-400">"LeetCode Matrix":</span> <a href="https://leetcode.com/u/Vishalydv99/" target="_blank" class="text-neutral-300 underline hover:text-cyan-300">u/Vishalydv99</a></div>
+                    <div><span class="text-cyan-400">"Academic Track":</span> B.Tech CSE (Data Science) // 3rd Year</div>
+                    <div><span class="text-cyan-400">"Core Alignment":</span> Machine Learning & Software Infrastructure</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Technical Stack (Upgraded Categorized Architecture) -->
+    <section id="skills" class="py-24 bg-neutral-900/20 border-y border-neutral-900/60 scroll-mt-20 card-node">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xl md:text-2xl font-bold mb-16 flex justify-center items-center gap-4 uppercase font-mono tracking-wider title-node"><span class="text-cyan-400">// 02.</span> Technical Arsenal</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 font-mono text-left">
+                <!-- Category 1 -->
+                <div class="p-6 bg-neutral-950 border border-neutral-900 rounded-xl card-node">
+                    <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-brain mr-2"></i> Data Science & Business Intelligence</h3>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Python Data Stack</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Power BI / DAX</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Predictive Models</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">SQL Analytics</span>
+                    </div>
+                </div>
+                <!-- Category 2 -->
+                <div class="p-6 bg-neutral-950 border border-neutral-900 rounded-xl card-node">
+                    <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-layer-group mr-2"></i> Full-Stack & Architecture</h3>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">React / Vite</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Node.js / Express</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">FastAPI Web Server</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Tailwind UI</span>
+                    </div>
+                </div>
+                <!-- Category 3 -->
+                <div class="p-6 bg-neutral-950 border border-neutral-900 rounded-xl card-node">
+                    <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-code-merge mr-2"></i> Algorithmic Core</h3>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Java Core Array</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">C++ Logic Loops</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Data Structures (DSA)</span>
+                    </div>
+                </div>
+                <!-- Category 4 -->
+                <div class="p-6 bg-neutral-950 border border-neutral-900 rounded-xl card-node">
+                    <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-shield-halved mr-2"></i> Infrastructure & Storage</h3>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">MongoDB NoSQL</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">MySQL Relational</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Kotlin Android AI</span>
+                        <span class="px-3 py-1.5 bg-neutral-900 rounded border border-neutral-800 tracking-box">Ethical Hacking Core</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Section 3: Engineering Works -->
+    <section id="projects" class="py-32 max-w-7xl mx-auto px-6 scroll-mt-20">
+        <h2 class="text-xl md:text-2xl font-bold mb-16 flex items-center gap-4 uppercase font-mono tracking-wider title-node"><span class="text-cyan-400">// 03.</span> Production Engine</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Project 1 -->
+            <div class="project-card neon-glow-hover bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 flex flex-col h-full hover:border-cyan-500/20 transition-all duration-300 relative overflow-hidden group card-node">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-cubes-split"></i></div>
+                    <a href="https://github.com/vishalyadav351/StudySync-AI" target="_blank" class="text-neutral-500 hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                </div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors font-display title-node">StudySync AI Ecosystem</h3>
+                <p class="text-xs text-neutral-400 flex-grow mb-6 leading-relaxed font-light content-text">
+                    A collaborative digital network designed to centralize student workflows. Builds real-time shared workspace interfaces, synchronous hours/consistency tracking algorithms, and integrated token sessions.
+                </p>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[9px] text-neutral-400 uppercase tracking-wider">
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">React.js</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Node / Express</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">MongoDB</span>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card neon-glow-hover bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 flex flex-col h-full hover:border-cyan-500/20 transition-all duration-300 relative overflow-hidden group card-node">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <a href="https://github.com/vishalyadav351" target="_blank" class="text-neutral-500 hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                </div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors font-display title-node">Banking Intelligence Matrix</h3>
+                <p class="text-xs text-neutral-400 flex-grow mb-6 leading-relaxed font-light content-text">
+                    End-to-end data analytics suite turning banking transactional variables into corporate KPIs. Maps loan risk forecasting, credit utilization indices, and client demographics into modular summaries.
+                </p>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[9px] text-neutral-400 uppercase tracking-wider">
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Power BI</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">DAX</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">SQL Engine</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Python</span>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card neon-glow-hover bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 flex flex-col h-full hover:border-cyan-500/20 transition-all duration-300 relative overflow-hidden group card-node">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-wave-square"></i></div>
+                    <a href="https://github.com/vishalyadav351/AeroMetrics-Nexus-AI" target="_blank" class="text-neutral-500 hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                </div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors font-display title-node">AeroMetrics Nexus AI</h3>
+                <p class="text-xs text-neutral-400 flex-grow mb-6 leading-relaxed font-light content-text">
+                    An advanced stateful control engine built to track student performance distributions. Runs mathematical analytics pipelines via Plotly and applies unsupervised vector cohort clustering algorithms.
+                </p>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[9px] text-neutral-400 uppercase tracking-wider">
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Python</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Dash</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Clustering</span>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card neon-glow-hover bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 flex flex-col h-full hover:border-cyan-500/20 transition-all duration-300 relative overflow-hidden group card-node">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-database"></i></div>
+                    <a href="https://github.com/vishalyadav351/DataSentinal-AI-Intelligent-Data-Dictionary-Agent" target="_blank" class="text-neutral-500 hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                </div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors font-display title-node">DataSentinel Agent</h3>
+                <p class="text-xs text-neutral-400 flex-grow mb-6 leading-relaxed font-light content-text">
+                    An asynchronous database injection agent built to cleanly serialize multipart large CSV arrays into MySQL instances. Integrates standard SQLAlchemy metadata inspections.
+                </p>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[9px] text-neutral-400 uppercase tracking-wider">
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">FastAPI</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">SQLAlchemy</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">MySQL</span>
+                </div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="project-card neon-glow-hover bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 flex flex-col h-full hover:border-cyan-500/20 transition-all duration-300 relative overflow-hidden group card-node">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-robot"></i></div>
+                    <a href="https://github.com/vishalyadav351/VyFocusX" target="_blank" class="text-neutral-500 hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                </div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors font-display title-node">VyFocusX AI Scanner</h3>
+                <p class="text-xs text-neutral-400 flex-grow mb-6 leading-relaxed font-light content-text">
+                    An offline native document scanner engineered for the Google Solution Challenge. Runs local, secure AI-powered OCR character-mapping logic directly on-device using CameraX hardware.
+                </p>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[9px] text-neutral-400 uppercase tracking-wider">
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Kotlin</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Google ML Kit</span>
+                    <span class="bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800 tracking-box">Android AI</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Section 4: Verification Vault -->
+    <section id="certificates" class="py-24 bg-neutral-900/10 border-t border-neutral-900/80 scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-xl md:text-2xl font-bold mb-16 flex items-center gap-4 uppercase font-mono tracking-wider title-node"><span class="text-cyan-400">// 04.</span> Verification Vault</h2>
+            <div class="space-y-4 font-mono text-xs md:text-sm">
+                
+                <!-- Credential 1 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[01]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">Network Management & Web Dev (Ethical Hacking)</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// Cyber Security Core</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1EdqZF22Qw8-SPFkJCcux2uL23ao7T3c4/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Credential 2 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[02]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">Industrial Training & Summer Internship Blueprint</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// Core Architecture</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/151xhLQMMsjkv5t_TQpcwvObtANYWegkM/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Credential 3 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[03]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">Native Android App Development Ecosystem</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// Kotlin Systems</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1d0fE4jfAISvUwYeFeV6x8puavOHioXYE/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Credential 4 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[04]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">Summer Training Validation (Advanced Python)</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// Dynamic Logic</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1KF06IVZpzoa2STN4QNV-BKMN8tXuzPf-/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Credential 5 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[05]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">Enterprise Data Analytics & KPI Engineering</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// Intelligence BI</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/15MYy2xYppb_8_3TZpe462y0gFqj8hdfd/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Credential 6 -->
+                <div class="p-4 bg-neutral-900/40 border border-neutral-900 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-cyan-500/10 transition-colors group card-node">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyan-400 text-sm font-bold">[06]</span>
+                        <span class="text-neutral-200 group-hover:text-cyan-300 transition-colors title-node">GDG New Delhi Global Hackathon Certificate</span>
+                        <span class="text-[10px] text-neutral-600 uppercase tracking-widest hidden lg:inline">// DataSentinel AI Node</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/10KpMBEh_bX6_raQpIGqN5voBJOAGTvU_/view?usp=drivesdk" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1 shrink-0">
+                        OPEN_RECORD.EXE <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Terminal Contact -->
+    <section id="contact" class="py-32 max-w-4xl mx-auto px-6 text-center scroll-mt-20">
+        <div class="border border-neutral-900 bg-neutral-900/20 rounded-2xl p-6 md:p-10 relative overflow-hidden card-node">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none"></div>
+            <h2 class="text-cyan-400 font-mono text-xs tracking-widest uppercase mb-4">// 05. Communications Terminal</h2>
+            
+            <!-- Interactive Live Code Terminal Widget -->
+            <div class="w-full bg-black border border-neutral-800 rounded-lg text-left font-mono text-xs overflow-hidden shadow-2xl mb-8 card-node">
+                <div class="bg-neutral-900 px-4 py-2 border-b border-neutral-800 flex justify-between items-center header-node">
+                    <span class="text-neutral-500 text-[11px]">bash - vishal_handshake.sh</span>
+                    <div class="flex space-x-1.5">
+                        <span class="w-2.5 h-2.5 bg-neutral-800 rounded-full"></span>
+                        <span class="w-2.5 h-2.5 bg-neutral-800 rounded-full"></span>
+                        <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full"></span>
+                    </div>
+                </div>
+                <div class="p-4 space-y-2 max-h-[220px] overflow-y-auto text-cyan-400/90" id="terminal-screen">
+                    <div class="text-neutral-500">&gt; Executing script node connection...</div>
+                    <div class="text-neutral-300">Status: Active Internships & Infrastructure optimization modules online.</div>
+                    <div class="text-neutral-500">&gt; <span class="text-yellow-500">To:</span> vishuydv991@gmail.com</div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 font-mono text-xs tracking-wider">
+                <a href="mailto:vishuydv991@gmail.com" class="px-6 py-3 bg-cyan-500 text-neutral-950 font-bold rounded hover:bg-cyan-400 transition-all duration-300">
+                    [ START_EMAIL_DISPATCH ]
+                </a>
+                <a href="https://www.linkedin.com/in/vishal-yadav-934407321" target="_blank" class="px-6 py-3 border border-neutral-800 text-neutral-300 rounded hover:border-cyan-500/30 hover:text-cyan-400 transition-all duration-300 bg-neutral-950 card-node label-text">
+                    linkedin.telemetry
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 text-center font-mono text-[10px] text-neutral-600 tracking-widest uppercase border-t border-neutral-900/60">
+        <p>Executed by Vishal Yadav // Stably Compiled 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

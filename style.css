@@ -1,0 +1,110 @@
+html {
+    scroll-behavior: smooth;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-mono {
+    font-family: 'Space Mono', monospace;
+}
+
+.font-display {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+}
+
+/* Premium Webkit Minimalist Scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+    background: #1f1f1f;
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #06b6d4;
+}
+
+/* Link Hover Animation */
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #06b6d4;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Immersive Card Glow Triggers */
+.project-card {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px -15px rgba(6, 182, 212, 0.15);
+}
+
+/* Futuristic Scanline Effect over Photo */
+.cyber-scanline {
+    position: relative;
+    overflow: hidden;
+}
+.cyber-scanline::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+.neon-glow-hover:hover {
+    border-color: #06b6d4 !important;
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-down {
+    animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- HARD CODED PURE SYSTEM LIGHT MODE CLASSES --- */
+.pure-light-bg {
+    background-color: #f8fafc !important; /* slate-50 */
+    color: #0f172a !important; /* slate-900 */
+}
+.pure-light-card {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+.pure-light-header {
+    background-color: rgba(248, 250, 252, 0.8) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+}
+.pure-light-text {
+    color: #0f172a !important;
+}
+.pure-light-muted {
+    color: #475569 !important;
+}
+.pure-light-box {
+    background-color: #e2e8f0 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
