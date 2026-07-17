@@ -137,13 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setInterval(() => {
         if(terminalScreen) {
-            // Loop logs infinitely to create a continuous terminal interface feel
             if (logCounter >= logMessages.length) {
                 logCounter = 0;
                 terminalScreen.innerHTML = '<div class="text-neutral-500">&gt; Refreshing pipeline handshake parameters...</div>';
             }
             const el = document.createElement('div');
-            el.className = "text-neutral-400 text-[11px] animate-fade-in";
+            el.className = "text-neutral-400 text-[11px]";
             el.innerHTML = logMessages[logCounter];
             terminalScreen.appendChild(el);
             terminalScreen.scrollTop = terminalScreen.scrollHeight;
@@ -201,4 +200,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('vishal-theme') === 'light') {
         executeThemeToggle();
     }
+
+    // --- ULTRA FLUID INTEL OBSERVER ENGINE LAYER ---
+    const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('cyber-animate-entry');
+                entry.target.style.opacity = "1";
+                observer.unobserve(entry.target); 
+            }
+        });
+    };
+
+    const revealOptions = {
+        root: null,
+        threshold: 0.1,
+        rootMargin: "0px 0px -40px 0px"
+    };
+
+    const scrollObserver = new IntersectionObserver(revealCallback, revealOptions);
+    const targets = document.querySelectorAll('.custom-scroll-reveal, .project-card');
+    targets.forEach(target => {
+        target.style.opacity = "0"; 
+        scrollObserver.observe(target);
+    });
 });
